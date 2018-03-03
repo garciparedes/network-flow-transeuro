@@ -29,9 +29,6 @@ model "2-steps-transportation-transeuro"
     n_destinations := sum(v in vertices | sum(k in products) demand(v, k) < 0 ) 1
     n_warehouses := sum(v in vertices | sum(k in products) demand(v, k) = 0 ) 1
     
-    writeln(n_origins)
-    writeln(n_destinations)
-    writeln(n_warehouses)
 	declarations
 		origins = 1..n_origins
 		destinations = 1..n_destinations
@@ -63,9 +60,7 @@ model "2-steps-transportation-transeuro"
     	end-do
 	end-do
 	
-
-	writeln(c,"\n", d)
-	
+	 
 	k1:=1
     i_origins := 1
 	i_destinations := 1
@@ -74,7 +69,7 @@ model "2-steps-transportation-transeuro"
     	j_warehouses := 1
     	origins_change := FALSE
     	warehouses_change := FALSE
-	    forall(j in vertices | i <= n and j <= n) do
+	    forall(j in vertices) do
     	    if(demand(i, k1) > 0 and demand(j, k1) = 0) then
     	        cost_1(i_origins, j_warehouses) := cost(i, j)
     	        j_warehouses := j_warehouses + 1
@@ -99,6 +94,10 @@ model "2-steps-transportation-transeuro"
 	    i_warehouses := i_warehouses + 1
 	end-do
 	
+	
+	!----------------------------------------------------------------------------------------
+	! Model
+	!----------------------------------------------------------------------------------------
 	forall(i in origins, k in products) do
 		res_in(i, k) := (sum(w in warehouses) x_1(i, w, k)) <= c(i, k)
 	end-do
@@ -121,7 +120,8 @@ model "2-steps-transportation-transeuro"
 	                sum(w in warehouses, j in destinations, k in products) x_2(w, j, k) * cost_2(w, j)
 	
 	minimize(objetive)
-	
+	!----------------------------------------------------------------------------------------
+    
     
     forall(k in products) do
         writeln
