@@ -3,10 +3,10 @@
 ## Contents
 
   * [Document](tex/document.pdf)
-  * [Linear Programming Model](src/linear-programming.mos)
-  * [Transportation Model](src/transportation.mos)
-  * [Network Flow Model](src/network-flow.mos)
-  * [Data Input](data/data.dat)
+  * [Linear Programming Model](mosel/linear-programming.mos)
+  * [Transportation Model](mosel/transportation.mos)
+  * [Network Flow Model](mosel/network-flow.mos)
+  * [Data Input](mosel/data.dat)
 
 ## Contributors
 
