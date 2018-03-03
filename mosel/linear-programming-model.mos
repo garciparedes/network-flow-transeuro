@@ -1,45 +1,45 @@
-model "2-steps-transportation-transeuro"
-    uses "mmxprs"; 
-    
+model "linear-programming-transeuro"
+    uses "mmxprs";
+
     declarations
         n: integer
         p: integer
     end-declarations
-    
+
     initializations from "data.dat"
         n p
     end-initializations
-    
-    declarations 
+
+    declarations
         vertices = 1..n
         products = 1..p
-        
+
         demand: array(vertices, products) of real
         cost: array(vertices, vertices) of real
         capacity: array(vertices) of real
     end-declarations
-    
+
     initializations from "data.dat"
         demand
-        cost 
+        cost
         capacity
     end-initializations
-    
+
     n_origins := sum(v in vertices | sum(k in products) demand(v, k) > 0) 1
     n_destinations := sum(v in vertices | sum(k in products) demand(v, k) < 0 ) 1
     n_warehouses := sum(v in vertices | sum(k in products) demand(v, k) = 0 ) 1
-    
+
 	declarations
 		origins = 1..n_origins
 		destinations = 1..n_destinations
 		warehouses = 1..n_warehouses
-		
-		c: array(origins, products) of real	
+
+		c: array(origins, products) of real
 		d: array(destinations, products) of real
 		cap: array(warehouses) of real
-		
+
 		cst: array(origins, destinations, warehouses) of real
-		
+
         x: array(vertices, vertices, vertices, products) of mpvar
 	end-declarations
 
@@ -58,8 +58,8 @@ forall(k in products) do
     	    end-if
     	end-do
 	end-do
-	
-	 
+
+
 	k1:=1
     i_origins := 1
 	forall(i in vertices) do
@@ -70,7 +70,7 @@ forall(k in products) do
         	destinations_change := FALSE
     	    forall(w in vertices) do
         	    if(demand(i, k1) > 0 and demand(j, k1) < 0 and demand(w, k1) = 0) then
-        	        cst(i_origins, j_destinations, w_warehouses) := cost(i, w) + cost(w, j)        	        
+        	        cst(i_origins, j_destinations, w_warehouses) := cost(i, w) + cost(w, j)
             	    origins_change := TRUE
             	    destinations_change := TRUE
             	    w_warehouses := w_warehouses + 1
@@ -84,18 +84,18 @@ forall(k in products) do
 	        i_origins := i_origins + 1
 	    end-if
 	end-do
-	
+
 	i_warehouses := 1
 	forall(v in vertices | capacity(v) > 0) do
-	    cap(i_warehouses) := capacity(v) 
+	    cap(i_warehouses) := capacity(v)
 	    i_warehouses := i_warehouses + 1
 	end-do
-	
+
     !----------------------------------------------------------------------------------------
 	! Model
 	!----------------------------------------------------------------------------------------
-	
-	
+
+
 	forall(i in origins, k in products) do
         res_in(i, k) := sum(j in destinations, w in warehouses) x(i, j, w, k) <= c(i, k)
 	end-do
@@ -103,28 +103,28 @@ forall(k in products) do
     forall(w in warehouses) do
 	    res_max(w) := sum(i in origins, j in destinations, k in products) x(i, j, w, k) <= cap(w)
 	end-do
-	 
+
     forall(j in destinations, k in products) do
         res_out(j, k) := sum(i in origins, w in warehouses) x(i, j, w, k) >= d(j, k)
     end-do
-    
-    objetive := sum(i in origins, j in destinations, w in warehouses, k in products) x(i, j, w, k)*(cst(i, j, w))  
-    
+
+    objetive := sum(i in origins, j in destinations, w in warehouses, k in products) x(i, j, w, k)*(cst(i, j, w))
+
     minimize(objetive)
     !----------------------------------------------------------------------------------------
-    
-    
+
+
     forall(k in products) do
         writeln
-        writeln("k = ", k)     
+        writeln("k = ", k)
         forall(i in origins) do
             writeln
-            writeln("\ti = ", i)      
+            writeln("\ti = ", i)
             write("\t\t\t")
             forall(j in destinations) do
                write(j, "\t")
             end-do
-            forall(w in warehouses) do 
+            forall(w in warehouses) do
                 writeln
                 write("\t\t",w, "\t")
                 forall(j in destinations) do
@@ -136,8 +136,8 @@ forall(k in products) do
         writeln
     end-do
     writeln
-    
-    
+
+
     writeln("objetive = ", getobjval)
 
 end-model
