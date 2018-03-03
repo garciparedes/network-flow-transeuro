@@ -1,0 +1,159 @@
+model "2-steps-transportation-transeuro"
+	uses "mmxprs"; 
+	
+	declarations
+	    n: integer
+	    p: integer
+	end-declarations
+
+    initializations from "data.dat"
+        n p
+    end-initializations
+    
+    declarations 
+        vertices = 1..n
+        products = 1..p
+        
+        demand: array(vertices, products) of real
+        cost: array(vertices, vertices) of real
+        capacity: array(vertices) of real
+    end-declarations
+    
+    initializations from "data.dat"
+        demand
+        cost 
+        capacity
+    end-initializations
+     
+    n_origins := sum(v in vertices | sum(k in products) demand(v, k) > 0) 1
+    n_destinations := sum(v in vertices | sum(k in products) demand(v, k) < 0 ) 1
+    n_warehouses := sum(v in vertices | sum(k in products) demand(v, k) = 0 ) 1
+    
+    writeln(n_origins)
+    writeln(n_destinations)
+    writeln(n_warehouses)
+	declarations
+		origins = 1..n_origins
+		destinations = 1..n_destinations
+		warehouses = 1..n_warehouses
+		
+		c: array(origins, products) of real	
+		d: array(destinations, products) of real
+		cap: array(warehouses) of real
+		
+		cost_1: array(origins, warehouses) of real
+		cost_2: array(warehouses, destinations) of real
+		
+		x_1: array(origins, warehouses, products) of mpvar
+		x_2: array(warehouses, destinations, products) of mpvar
+	end-declarations
+	
+	forall(k in products) do
+    	i_origins := 1
+    	i_destinations := 1
+    	i_warehouses := 1
+    	forall(v in vertices) do
+    	    if(demand(v, k) > 0) then
+    	        c(i_origins, k) := demand(v, k)
+    	        i_origins := i_origins + 1;
+    	    elif(demand(v, k) < 0) then
+    	        d(i_destinations, k) := - demand(v, k)
+    	        i_destinations := i_destinations + 1
+    	    end-if
+    	end-do
+	end-do
+	
+
+	writeln(c,"\n", d)
+	
+	k1:=1
+    i_origins := 1
+	i_destinations := 1
+	forall(i in vertices) do
+    	j_destinations := 1
+    	j_warehouses := 1
+    	origins_change := FALSE
+    	warehouses_change := FALSE
+	    forall(j in vertices | i <= n and j <= n) do
+    	    if(demand(i, k1) > 0 and demand(j, k1) = 0) then
+    	        cost_1(i_origins, j_warehouses) := cost(i, j)
+    	        j_warehouses := j_warehouses + 1
+    	        origins_change := TRUE
+    	     elif(demand(i, k1) = 0 and demand(j, k1) < 0) then
+    	        cost_2(i_warehouses, j_destinations) := cost(i, j)
+                j_destinations := j_destinations + 1
+                warehouse_change := TRUE
+    	    end-if
+	    end-do
+	    if (origins_change = TRUE) then
+	        i_origins := i_origins + 1
+	    end-if
+	    if (warehouse_change = TRUE) then
+	        i_warehouses := i_warehouses + 1
+	    end-if
+	end-do
+	
+	i_warehouses := 1
+	forall(v in vertices | capacity(v) > 0) do
+	    cap(i_warehouses) := capacity(v) 
+	    i_warehouses := i_warehouses + 1
+	end-do
+	
+	forall(i in origins, k in products) do
+		res_in(i, k) := (sum(w in warehouses) x_1(i, w, k)) <= c(i, k)
+	end-do
+	
+	
+	forall(w in warehouses, k in products) do
+	    res_union(w, k) := sum(i in origins) x_1(i, w, k) = sum(j in destinations) x_2(w, j, k) 
+	end-do
+	
+	forall(w in warehouses) do
+	    res_max(w) := sum(i in origins, k in products) x_1(i, w, k) <= cap(w)
+	end-do
+	
+	forall(j in destinations, k in products) do
+		res_out(j, k) := sum(w in warehouses) x_2(w, j, k) >= d(j, k)
+	end-do
+	
+	
+	objetive := sum(i in origins, w in warehouses, k in products) x_1(i, w, k) * cost_1(i, w) + 
+	                sum(w in warehouses, j in destinations, k in products) x_2(w, j, k) * cost_2(w, j)
+	
+	minimize(objetive)
+	
+    
+    forall(k in products) do
+        writeln
+        writeln("k = ", k)
+        write("\t")
+        forall(j in warehouses) do
+           write(j, "\t")
+        end-do
+        forall(i in origins) do
+            writeln
+            write(i, "\t")
+            forall(j in warehouses) do
+                write(getsol(x_1(i, j, k)), "\t")
+            end-do
+        end-do
+        writeln
+        writeln
+        write("\t")
+        forall(j in destinations) do
+           write(j, "\t")
+        end-do
+        forall(i in warehouses) do
+            writeln
+            write(i, "\t")
+            forall(j in destinations) do
+                write(getsol(x_2(i, j, k)), "\t")
+            end-do
+        end-do
+        writeln
+    end-do
+    writeln
+	
+	writeln("objetive = ", getobjval)
+	
+end-model
