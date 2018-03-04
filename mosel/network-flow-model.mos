@@ -1,57 +1,60 @@
 model "network-flow-transeuro"
-    uses "mmxprs"; 
-    
+    uses "mmxprs";
+
     declarations
         n: integer
         p: integer
     end-declarations
-    
+
     initializations from "data.dat"
         n p
     end-initializations
-        
+
     declarations
         vertices = 1..(n + 1)
         products = 1..p
         demand: array(vertices, products) of real
         cost: array(vertices, vertices) of real
         capacity: array(vertices) of real
-        
         x: dynamic array(vertices, vertices, products) of mpvar
     end-declarations
-    
+
     initializations from "data.dat"
         demand cost capacity
     end-initializations
-    
+
     forall(i in vertices, j in vertices, k in products | cost(i, j) <> 0 and i <= n and j <= n) do
         create(x(i, j, k))
     end-do
-    
+
     forall(k in products) do
         d_k := sum(i in vertices) demand(i, k)
-        if (d_k > 0) then 
+        if (d_k > 0) then
             forall(i in vertices | demand(i, k) > 0) do
                 create(x(i, n + 1, k))
             end-do
-            demand(n + 1, k) := - d_k    
+            demand(n + 1, k) := - d_k
         end-if
     end-do
-    
+
+    !----------------------------------------------------------------------------------------
+    ! Model
+    !----------------------------------------------------------------------------------------
+
     forall(i in vertices, k in products) do
         res_network(i, k) := sum(j in vertices) x(i, j, k) - sum(j in vertices) x(j, i, k) = demand(i, k)
     end-do
-    
-    
+
     forall(i in vertices | capacity(i) > 0) do
         res_capacity(i) := (sum(j in vertices, k in products) x(i, j, k)) <= capacity(i)
-    end-do 
-     
-   
+    end-do
+
     objetive := sum(i in vertices, j in vertices, k in products) x(i, j, k) * cost(i, j)
-    
+
     minimize(objetive)
-    
+
+    !----------------------------------------------------------------------------------------
+
     forall(k in products) do
         writeln
         writeln("k = ", k)
@@ -68,8 +71,8 @@ model "network-flow-transeuro"
         end-do
         writeln
     end-do
-    
+
     writeln
     writeln("objetive = ", getobjval)
-    
+
 end-model

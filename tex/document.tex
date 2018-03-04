@@ -4,7 +4,7 @@
 
 \usepackage{mystyle}
 \usepackage{myvars}
-
+\usepackage{mylinearprogramming}
 %-----------------------------
 \allowdisplaybreaks
 
@@ -26,20 +26,87 @@
     \paragraph{}
     [TODO ]
 
-  \section{Planteamiento: Problema de Transporte}
+    \begin{eqfloat}
+      \begin{equation}
+        \begin{array}{ll@{}ll}
+          \text{Minimizar}	& \displaystyle \sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\sum\limits_{w=1}^{l}\sum\limits_{k=1}^{p} x_{ijwk} \cdot c_{ijw} \\
+          \text{sujeto a}		& \sum\limits_{j=1}^{m}\sum\limits_{w=1}^{l} x_{ijwk}	\leq c_{ik}, 		& \forall i \in \{1,...,n\}, \forall k \in \{1,...,p\}\\
+                            &	\sum\limits_{i=1}^{n}\sum\limits_{w=1}^{l} x_{ijwk}	\leq d_{jk}, 		& \forall j \in \{1,...,m\}, \forall k \in \{1,...,p\}\\
+                            &	\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{p} x_{ijwk}	\leq u_{w}, 		& \forall w \in \{1,...,l\}\\
+                            & x_{ijwk}	\geq 0, 	& \forall i \in \{1,...,n\}, \forall j \in \{1,...,m\}, \forall w \in \{1,...,l\}, \forall k \in \{1,...,p\}
+        \end{array}
+      \end{equation}
+      \caption{Formulación como \emph{Problema de Programación Lineal}.}
+      \label{eq:linear-programming-model}
+    \end{eqfloat}
+
+
+  \section{Planteamiento: Transporte en 2 Etapas}
 
     \paragraph{}
     [TODO ]
+
+    \begin{eqfloat}
+      \begin{equation}
+        \begin{array}{ll@{}ll}
+          \text{Minimizar}	& \displaystyle \sum\limits_{i=1}^{n}\sum\limits_{w=1}^{l}\sum\limits_{k=1}^{p} x^{1}_{iwk} \cdot c^{1}_{iw} +
+              \sum\limits_{w=1}^{l}\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{p} x^{2}_{wjk} \cdot c^{2}_{wj} \\
+          \text{sujeto a}		& \sum\limits_{w=1}^{l} x^{1}_{iwk}	\leq c_{ik}, 		                        & \forall i \in \{1,...,n\}, \forall k \in \{1,...,p\}\\
+                            &	\sum\limits_{i=1}^{n} x^{1}_{iwk}	= \sum\limits_{j=1}^{m} x^{2}_{wjk}, 		& \forall w \in \{1,...,l\}, \forall k \in \{1,...,p\}\\
+                            &	\sum\limits_{w=1}^{l} x^{2}_{wjk}	\geq d_{jw}, 		                        & \forall j \in \{1,...,m\}, \forall k \in \{1,...,p\}\\
+                            &	\sum\limits_{i=1}^{n}\sum\limits_{k=1}^{p}  x^{1}_{iwk}	\leq u_{w}, 		  & \forall w \in \{1,...,l\}\\
+                            & x^{1}_{iwk}	\geq 0, 	& \forall i \in \{1,...,n\}, \forall w \in \{1,...,l\}, \forall k \in \{1,...,p\} \\
+                            & x^{2}_{wjk}	\geq 0, 	& \forall w \in \{1,...,l\}, \forall j \in \{1,...,m\}\forall k \in \{1,...,p\}
+        \end{array}
+      \end{equation}
+      \caption{Formulación como \emph{Problema de Transporte en 2 Etapas}.}
+      \label{eq:linear-programming-model}
+    \end{eqfloat}
+
+
 
   \section{Planteamiento: Flujo de Redes}
 
     \paragraph{}
     [TODO ]
 
+
+    \begin{eqfloat}
+      \begin{equation}
+        \begin{array}{ll@{}ll}
+          \text{Minimizar}	& \displaystyle \sum\limits_{i=1}^{n}\sum\limits_{j=1}^{n}\sum\limits_{k=1}^{p} x^{1}_{ijk} \cdot c_{ij} \\
+          \text{sujeto a}		& \sum\limits_{j=1}^{n} x^{1}_{ijk} - \sum\limits_{j=1}^{n} x^{1}_{jik} = d_{ik}, & \forall i \in \{1,...,n\}, \forall k \in \{1,...,p\}\\
+                            &	\sum\limits_{j=1}^{n}\sum\limits_{k=1}^{p}  x_{ijk}	\leq u_{i}, 		  & \forall i \in \{1,...,l\} \cap u_{i} > 0\\
+                            & x_{ijk}	\geq 0, 	& \forall i \in \{1,...,n\}, \forall j \in \{1,...,n\}\forall k \in \{1,...,p\}
+        \end{array}
+      \end{equation}
+      \caption{Formulación como \emph{Problema Flujo de Redes}.}
+      \label{eq:linear-programming-model}
+    \end{eqfloat}
+
+
   \section{Conclusiones}
 
     \paragraph{}
     [TODO ]
+
+  \begin{appendices}
+
+    \section{Código Fuente: Programación Lineal}
+      \verbatiminput{./../mosel/linear-programming-model.mos}
+
+    \section{Código Fuente: Transporte en 2 Etapas}
+      \verbatiminput{./../mosel/two-steps-transportation-model.mos}
+
+    \section{Código Fuente: Flujo de Redes}
+      \verbatiminput{./../mosel/network-flow-model.mos}
+
+    \section{Datos}
+      \verbatiminput{./../mosel/data.dat}
+
+  \end{appendices}
+
+
 
 
 
@@ -50,7 +117,7 @@
   \nocite{subject:pent2017}
   \nocite{tool:xpress-mosel}
   \nocite{repository:network-flow-transeuro}
-  
+
   \bibliographystyle{alpha}
   \bibliography{bib}
 

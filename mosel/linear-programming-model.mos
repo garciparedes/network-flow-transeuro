@@ -29,22 +29,22 @@ model "linear-programming-transeuro"
     n_destinations := sum(v in vertices | sum(k in products) demand(v, k) < 0 ) 1
     n_warehouses := sum(v in vertices | sum(k in products) demand(v, k) = 0 ) 1
 
-	declarations
-		origins = 1..n_origins
-		destinations = 1..n_destinations
-		warehouses = 1..n_warehouses
+    declarations
+    	origins = 1..n_origins
+    	destinations = 1..n_destinations
+    	warehouses = 1..n_warehouses
 
-		c: array(origins, products) of real
-		d: array(destinations, products) of real
-		cap: array(warehouses) of real
+    	c: array(origins, products) of real
+    	d: array(destinations, products) of real
+    	cap: array(warehouses) of real
 
-		cst: array(origins, destinations, warehouses) of real
+    	cst: array(origins, destinations, warehouses) of real
 
         x: array(vertices, vertices, vertices, products) of mpvar
-	end-declarations
+    end-declarations
 
 
-forall(k in products) do
+    forall(k in products) do
     	i_origins := 1
     	i_destinations := 1
     	i_warehouses := 1
@@ -57,15 +57,15 @@ forall(k in products) do
     	        i_destinations := i_destinations + 1
     	    end-if
     	end-do
-	end-do
+    end-do
 
 
-	k1:=1
+    k1:=1
     i_origins := 1
-	forall(i in vertices) do
+    forall(i in vertices) do
     	j_destinations := 1
     	origins_change := FALSE
-	    forall(j in vertices) do
+        forall(j in vertices) do
         	w_warehouses := 1
         	destinations_change := FALSE
     	    forall(w in vertices) do
@@ -77,32 +77,32 @@ forall(k in products) do
         	    end-if
     	    end-do
     	    if (destinations_change = TRUE) then
-	            j_destinations := j_destinations + 1
-	        end-if
-	    end-do
-	    if (origins_change = TRUE) then
-	        i_origins := i_origins + 1
-	    end-if
-	end-do
+                j_destinations := j_destinations + 1
+            end-if
+        end-do
+        if (origins_change = TRUE) then
+            i_origins := i_origins + 1
+        end-if
+    end-do
 
-	i_warehouses := 1
-	forall(v in vertices | capacity(v) > 0) do
-	    cap(i_warehouses) := capacity(v)
-	    i_warehouses := i_warehouses + 1
-	end-do
+    i_warehouses := 1
+    forall(v in vertices | capacity(v) > 0) do
+        cap(i_warehouses) := capacity(v)
+        i_warehouses := i_warehouses + 1
+    end-do
 
     !----------------------------------------------------------------------------------------
-	! Model
-	!----------------------------------------------------------------------------------------
+    ! Model
+    !----------------------------------------------------------------------------------------
 
 
-	forall(i in origins, k in products) do
+    forall(i in origins, k in products) do
         res_in(i, k) := sum(j in destinations, w in warehouses) x(i, j, w, k) <= c(i, k)
-	end-do
+    end-do
 
     forall(w in warehouses) do
-	    res_max(w) := sum(i in origins, j in destinations, k in products) x(i, j, w, k) <= cap(w)
-	end-do
+        res_max(w) := sum(i in origins, j in destinations, k in products) x(i, j, w, k) <= cap(w)
+    end-do
 
     forall(j in destinations, k in products) do
         res_out(j, k) := sum(i in origins, w in warehouses) x(i, j, w, k) >= d(j, k)
@@ -111,6 +111,7 @@ forall(k in products) do
     objetive := sum(i in origins, j in destinations, w in warehouses, k in products) x(i, j, w, k)*(cst(i, j, w))
 
     minimize(objetive)
+
     !----------------------------------------------------------------------------------------
 
 
