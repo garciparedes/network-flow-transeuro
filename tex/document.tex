@@ -6,7 +6,7 @@
 \usepackage{myvars}
 \usepackage{mylinearprogramming}
 %-----------------------------
-\allowdisplaybreaks
+
 
 \begin{document}
 
@@ -25,6 +25,16 @@
 
     \paragraph{}
     Puesto que el objetivo de este trabajo reside en la comparación de las distintas modelizaciones posibles para resolver el problema, esta notación variará en ciertas ocasiones para adaptarse a las restricciones específicas de cada problema. Para tratar de facilitar al máximo la comparación entre modelos por parte del usuario, se ha decidido utilizar tan solo una representación en el conjunto de datos (sin que este tenga que tener en cuenta el balanceo del problema cuando el modelo lo requiere). A costa de esto, se ha añadido cierta complejidad en la lectura de datos, que requiere de la adaptación concreta hacia la entrada necesaria para cada modelo.
+
+    \paragraph{}
+    El conjunto de datos puede visualizarse mediante su representación en forma de grafo en la figura \ref{img:graph-network}, en la cual se incluyen los vértices o puntos que representan, orígenes, almacenes y destinos, así como la oferta y demanda de cada uno de ellos, junto con las restricciones de capacidad y los costes de cada arista.
+
+    \begin{figure}[!hp]
+      \centering
+      \includegraphics[width=0.7\textwidth]{cost-demand-capacity}
+      \caption{Representación gráfica del Conjunto de Datos}
+      \label{img:graph-network}
+    \end{figure}
 
     \paragraph{}
     El resto del documento se organiza de la siguiente manera: se describen los tres modelos estudiados (\emph{Programación Lineal} en la sección \ref{section:linear-programming}, \emph{Transporte en 2 Etapas} en la sección \ref{section:transportation} y \emph{Flujo de Redes} en la sección \ref{section:network-flow}) en las cuales se hace especial incapié en las dificultades de implementación así como el coste computacional y las restricciones propias del modelo en caso de ser necesarias. Para finalizar, en la sección \ref{section:conclusions} se concluye el trabajo con una comparación global entre las tres estrategias de modelización.
@@ -55,8 +65,15 @@
     \paragraph{}
     En cuanto al número de variables de decisión necesarias para resolver el problema, en este caso necesitamos $n(I) \cdot n(J) \cdot n(W) \cdot n(P) = 2 \cdot 3 \cdot 2 \cdot 2 = 24$. A nivel de restricciones, tenemos $n(I) \cdot n(P) + n(W) \cdot n(P) + n(J) \cdot n(P) + \cdot n(W) + n(I) \cdot n(J) \cdot n(W) \cdot n(P) = 2 \cdot 2 + 2 \cdot 2 + 3 \cdot 2 + 2 \cdot 3 \cdot 2 \cdot 2 = 38$. En la implementación realizada cuyo código fuente puede ser consultado en el Apéndice \ref{appendix:source-code-linear-programmming} se ha encontrado la solución óptima en 11 iteracciónes.
 
+    \begin{figure}[!hp]
+      \centering
+      \includegraphics[width=0.8\textwidth]{linear-programming}
+      \caption{Representación gráfica de la solución obtenida mediante la modelización como problema de \emph{Programación Lineal}}
+      \label{img:graph-linear-programming}
+    \end{figure}
+
     \paragraph{}
-    [TODO hablar de la solución encontrada]
+    La solución obtenida mediante la modelización como un problema de programación lineal se muestra en la figura \ref{img:graph-linear-programming}.
 
 
   \section{Planteamiento: Transporte en 2 Etapas}
@@ -94,8 +111,15 @@
     \paragraph{}
     En cuanto al número de variables de decisión necesarias para el planteaminento del modelo, en este caso han utilizado $n(I) \cdot n(W) \cdot n(P) + n(W) \cdot n(J) \cdot n(P) = 2 \cdot 2 \cdot 2 + 2\cdot 3\cdot 2 = 8 + 12 = 20$ junto con $n(I) \cdot n(P) + n(W) \cdot n(P) + n(J) \cdot n(P) + n(W) + n(I) \cdot n(W) \cdot n(P) + n(W) \cdot n(J) \cdot n(P) = 2 \cdot 2 + 2 \cdot 2 + 3 \cdot 2 + 2 + 2 \cdot 2 \cdot 2 +  2 \cdot 3 \cdot 2 = 36$. En la implementación cuyo código fuente puede ser consultado en el Apéndice \ref{appendix:source-code-transportation} realizada se ha encontrado la solución óptima en 14 iteracciónes.
 
+    \begin{figure}[!hp]
+      \centering
+      \includegraphics[width=0.8\textwidth]{transportation}
+      \caption{Representación gráfica de la solución obtenida mediante la modelización como problema de \emph{Transporte en 2 Etapas}}
+      \label{img:graph-transportation}
+    \end{figure}
+
     \paragraph{}
-    [TODO hablar de resultados]
+    La solución obtenida mediante la modelización como un problema de transporte se muestra en la figura \ref{img:graph-transportation}.
 
 
   \section{Planteamiento: Flujo de Redes}
@@ -126,9 +150,16 @@
     \paragraph{}
     En cuanto al número de variables de decisión necesarias para el planteaminento del modelo, en este caso han utilizado $ (n(I) + n(I) + n(W) + 1) \cdot n(P) = 8 \cdot 2 = 16$ junto con $(n(I) + n(I) + n(W) + 1) \cdot n(P) + (n(I) + n(I) + n(W) + 1) + (n(I) + n(I) + n(W) + 1) \cdot n(P) = 16 + 8 + 16 = 40$. En la implementación cuyo código fuente puede ser consultado en el Apéndice \ref{appendix:source-code-network-flow} realizada se ha encontrado la solución óptima en 10 iteracciónes.
 
-    \paragraph{}
-    [TODO hablar de resultados]
 
+    \begin{figure}[!hp]
+      \centering
+      \includegraphics[width=0.8\textwidth]{network-flow}
+      \caption{Representación gráfica de la solución obtenida mediante la modelización como problema de \emph{Flujo de Redes}}
+      \label{img:graph-network-flow}
+    \end{figure}
+
+    \paragraph{}
+    La solución obtenida mediante la modelización como un problema de flujo de redes se muestra en la figura \ref{img:graph-network-flow}.
 
   \section{Conclusiones}
   \label{section:conclusions}
