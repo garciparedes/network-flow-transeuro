@@ -1,6 +1,6 @@
 % !TEX root = ./document.tex
 
-\documentclass{article}
+\documentclass[a4paper, spanish]{article}
 
 \usepackage{mystyle}
 \usepackage{myvars}
@@ -172,20 +172,22 @@
 
   \begin{appendices}
 
-    \section{Código Fuente: Programación Lineal}
-    \label{appendix:source-code-linear-programmming}
+    \section{Código Fuente}
 
-      \inputminted{text}{./../mosel/linear-programming-model.mos}
+      \subsection{Programación Lineal}
+      \label{appendix:source-code-linear-programmming}
 
-    \section{Código Fuente: Transporte en 2 Etapas}
-    \label{appendix:source-code-transportation}
+        \inputminted{text}{./../mosel/linear-programming-model.mos}
 
-      \inputminted{text}{./../mosel/two-steps-transportation-model.mos}
+      \subsection{Transporte en 2 Etapas}
+      \label{appendix:source-code-transportation}
 
-    \section{Código Fuente: Flujo de Redes}
-    \label{appendix:source-code-network-flow}
+        \inputminted{text}{./../mosel/two-steps-transportation-model.mos}
 
-      \inputminted{text}{./../mosel/network-flow-model.mos}
+      \subsection{Flujo de Redes}
+      \label{appendix:source-code-network-flow}
+
+        \inputminted{text}{./../mosel/network-flow-model.mos}
 
     \section{Datos}
     \label{appendix:data}
