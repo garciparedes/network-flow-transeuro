@@ -1,0 +1,16 @@
+digraph {
+    graph[nodesep="1", ranksep="3"];
+    rankdir="LR";
+    splines="line";
+    forcelabels=true;
+    P1 -> A1[color=red, xlabel = "210"];
+    P1 -> A2[color=red, xlabel = "85"];
+    P2 -> A1[];
+    P2 -> A2[color=red, xlabel = "315"];
+    A1 -> D1[color=red, xlabel = "120"];
+    A1 -> D2[];
+    A1 -> D3[color=red, xlabel = "90"];
+    A2 -> D1[];
+    A2 -> D2[color=red, xlabel = "310"];
+    A2 -> D3[color=red, xlabel = "90"];
+}
