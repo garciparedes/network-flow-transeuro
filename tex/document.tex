@@ -50,7 +50,7 @@
         \begin{array}{ll@{}ll}
           \text{Minimizar}	& \displaystyle \sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\sum\limits_{w=1}^{l}\sum\limits_{k=1}^{p} x_{ijwk} \cdot c_{ijw} \\
           \text{sujeto a}		& \sum\limits_{j=1}^{m}\sum\limits_{w=1}^{l} x_{ijwk}	\leq s_{ik}, 		& \forall i \in \{1,...,n\}, \forall k \in \{1,...,p\}\\
-                            &	\sum\limits_{i=1}^{n}\sum\limits_{w=1}^{l} x_{ijwk}	\leq d_{jk}, 		& \forall j \in \{1,...,m\}, \forall k \in \{1,...,p\}\\
+                            &	\sum\limits_{i=1}^{n}\sum\limits_{w=1}^{l} x_{ijwk}	\geq d_{jk}, 		& \forall j \in \{1,...,m\}, \forall k \in \{1,...,p\}\\
                             &	\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{p} x_{ijwk}	\leq u_{w}, 		& \forall w \in \{1,...,l\}  \cap u_{w} > 0 \\
                             & x_{ijwk}	\geq 0, 	& \forall i \in \{1,...,n\}, \forall j \in \{1,...,m\}, \forall w \in \{1,...,l\}, \forall k \in \{1,...,p\}
         \end{array}
