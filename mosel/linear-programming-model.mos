@@ -1,4 +1,11 @@
 model "linear-programming-transeuro"
+
+    !----------------------------------------------------------------------------------------
+    ! Linear Programming Model - Transeuro
+    ! Sergio García Prado - garciparedes.me
+    ! March 2018
+    !----------------------------------------------------------------------------------------
+
     uses "mmxprs";
 
     declarations

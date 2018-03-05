@@ -1,4 +1,12 @@
 model "2-steps-transportation-transeuro"
+
+
+    !----------------------------------------------------------------------------------------
+    ! Two Steps Transportation Model - Transeuro
+    ! Sergio García Prado - garciparedes.me
+    ! March 2018
+    !----------------------------------------------------------------------------------------
+
     uses "mmxprs";
 
     declarations

@@ -21,7 +21,7 @@
   \section{Introducción}
 
     \paragraph{}
-    En este documento se va a estudiar el planteamiento del problema del transporte de mercancías desde un conjunto de orígenes hacia un conjunto de destinos, los cuales deben visitar un almacen intermedio. En este caso, el contexto del problema es el siguiente: \emph{La empresa transeuro quiere encontrar la solución óptima para transportar sus mercancías de dos tipos $\{p_1, p_2\}$ desde los puntos de origen $I = \{i_1, i_2\}$ hacia los puntos de destino $J = \{j_1, j_2, j_3\}$ teniendo que atravesar obligatoriamente uno de los puntos intemedio $W =\{w_1, w_2\}$. En el problema, el conjunto $I$ se refiere a puertos de origen,el conjunto $W$ a almacenes intermedio y el conjunto $J$ a ciudades de destino. Cada puerto de origen tiene una determinada cota de producción por producto (que denotaremos por $u_{ik}$), y cada destino una determinada demanda por producto (que denotaremos por $d_{jk}$). Además, cada almacen impone una restricción de espacio total (que denotamos por $v_{w}$). En cuanto a los costes de transporte, este tan solo depende de la ruta y se mantiene constante para el producto, por lo que lo denotaremos por $c_{ij}$}. (Los valores concretos utilizados pueden ser consultados en el Apéndice \ref{appendix:data}).
+    En este documento se va a estudiar el planteamiento del problema del transporte de mercancías desde un conjunto de orígenes hacia un conjunto de destinos, los cuales deben visitar un almacen intermedio. En este caso, el contexto del problema es el siguiente: \emph{La empresa transeuro quiere encontrar la solución óptima para transportar sus mercancías de dos tipos $\{p_1, p_2\}$ desde los puntos de origen $I = \{i_1, i_2\}$ hacia los puntos de destino $J = \{j_1, j_2, j_3\}$ teniendo que atravesar obligatoriamente uno de los puntos intemedio $W =\{w_1, w_2\}$. En el problema, el conjunto $I$ se refiere a puertos de origen,el conjunto $W$ a almacenes intermedio y el conjunto $J$ a ciudades de destino. Cada puerto de origen tiene una determinada cota de producción por producto (que denotaremos por $s_{ik}$), y cada destino una determinada demanda por producto (que denotaremos por $d_{jk}$). Además, cada almacen impone una restricción de espacio total (que denotamos por $u_{w}$). En cuanto a los costes de transporte, este tan solo depende de la ruta y se mantiene constante para el producto, por lo que lo denotaremos por $c_{ij}$}. (Los valores concretos utilizados pueden ser consultados en el Apéndice \ref{appendix:data}).
 
     \paragraph{}
     Puesto que el objetivo de este trabajo reside en la comparación de las distintas modelizaciones posibles para resolver el problema, esta notación variará en ciertas ocasiones para adaptarse a las restricciones específicas de cada problema. Para tratar de facilitar al máximo la comparación entre modelos por parte del usuario, se ha decidido utilizar tan solo una representación en el conjunto de datos (sin que este tenga que tener en cuenta el balanceo del problema cuando el modelo lo requiere). A costa de esto, se ha añadido cierta complejidad en la lectura de datos, que requiere de la adaptación concreta hacia la entrada necesaria para cada modelo.
@@ -49,9 +49,9 @@
       \begin{equation}
         \begin{array}{ll@{}ll}
           \text{Minimizar}	& \displaystyle \sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\sum\limits_{w=1}^{l}\sum\limits_{k=1}^{p} x_{ijwk} \cdot c_{ijw} \\
-          \text{sujeto a}		& \sum\limits_{j=1}^{m}\sum\limits_{w=1}^{l} x_{ijwk}	\leq u_{ik}, 		& \forall i \in \{1,...,n\}, \forall k \in \{1,...,p\}\\
+          \text{sujeto a}		& \sum\limits_{j=1}^{m}\sum\limits_{w=1}^{l} x_{ijwk}	\leq s_{ik}, 		& \forall i \in \{1,...,n\}, \forall k \in \{1,...,p\}\\
                             &	\sum\limits_{i=1}^{n}\sum\limits_{w=1}^{l} x_{ijwk}	\leq d_{jk}, 		& \forall j \in \{1,...,m\}, \forall k \in \{1,...,p\}\\
-                            &	\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{p} x_{ijwk}	\leq v_{w}, 		& \forall w \in \{1,...,l\}  \cap v_{w} > 0 \\
+                            &	\sum\limits_{i=1}^{n}\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{p} x_{ijwk}	\leq u_{w}, 		& \forall w \in \{1,...,l\}  \cap u_{w} > 0 \\
                             & x_{ijwk}	\geq 0, 	& \forall i \in \{1,...,n\}, \forall j \in \{1,...,m\}, \forall w \in \{1,...,l\}, \forall k \in \{1,...,p\}
         \end{array}
       \end{equation}
@@ -96,10 +96,10 @@
         \begin{array}{ll@{}ll}
           \text{Minimizar}	& \displaystyle \sum\limits_{i=1}^{n}\sum\limits_{w=1}^{l}\sum\limits_{k=1}^{p} x^{1}_{iwk} \cdot c^{1}_{iw} +
               \sum\limits_{w=1}^{l}\sum\limits_{j=1}^{m}\sum\limits_{k=1}^{p} x^{2}_{wjk} \cdot c^{2}_{wj} \\
-          \text{sujeto a}		& \sum\limits_{w=1}^{l} x^{1}_{iwk}	\leq u_{ik}, 		                        & \forall i \in \{1,...,n\}, \forall k \in \{1,...,p\}\\
+          \text{sujeto a}		& \sum\limits_{w=1}^{l} x^{1}_{iwk}	\leq s_{ik}, 		                        & \forall i \in \{1,...,n\}, \forall k \in \{1,...,p\}\\
                             &	\sum\limits_{i=1}^{n} x^{1}_{iwk}	= \sum\limits_{j=1}^{m} x^{2}_{wjk}, 		& \forall w \in \{1,...,l\}, \forall k \in \{1,...,p\}\\
                             &	\sum\limits_{w=1}^{l} x^{2}_{wjk}	\geq d_{jw}, 		                        & \forall j \in \{1,...,m\}, \forall k \in \{1,...,p\}\\
-                            &	\sum\limits_{i=1}^{n}\sum\limits_{k=1}^{p}  x^{1}_{iwk}	\leq v_{w}, 		  & \forall w \in \{1,...,l\} \cap v_{w} > 0\\
+                            &	\sum\limits_{i=1}^{n}\sum\limits_{k=1}^{p}  x^{1}_{iwk}	\leq u_{w}, 		  & \forall w \in \{1,...,l\} \cap u_{w} > 0\\
                             & x^{1}_{iwk}	\geq 0, 	& \forall i \in \{1,...,n\}, \forall w \in \{1,...,l\}, \forall k \in \{1,...,p\} \\
                             & x^{2}_{wjk}	\geq 0, 	& \forall w \in \{1,...,l\}, \forall j \in \{1,...,m\}, \forall k \in \{1,...,p\}
         \end{array}
@@ -139,7 +139,7 @@
         \begin{array}{ll@{}ll}
           \text{Minimizar}	& \displaystyle \sum\limits_{i=1}^{n}\sum\limits_{j=1}^{n}\sum\limits_{k=1}^{p} x^{1}_{ijk} \cdot c_{ij} \\
           \text{sujeto a}		& \sum\limits_{j=1}^{n} x^{1}_{ijk} - \sum\limits_{j=1}^{n} x^{1}_{jik} = d_{ik}, & \forall i \in \{1,...,n\}, \forall k \in \{1,...,p\}\\
-                            &	\sum\limits_{j=1}^{n}\sum\limits_{k=1}^{p}  x_{ijk}	\leq v_{i}, 		  & \forall i \in \{1,...,l\} \cap v_{i} > 0\\
+                            &	\sum\limits_{j=1}^{n}\sum\limits_{k=1}^{p}  x_{ijk}	\leq u_{i}, 		  & \forall i \in \{1,...,l\} \cap u_{i} > 0\\
                             & x_{ijk}	\geq 0, 	& \forall i \in \{1,...,n\}, \forall j \in \{1,...,n\}, \forall k \in \{1,...,p\}
         \end{array}
       \end{equation}

@@ -1,4 +1,11 @@
 model "network-flow-transeuro"
+
+    !----------------------------------------------------------------------------------------
+    ! Network Flow Model - Transeuro
+    ! Sergio García Prado - garciparedes.me
+    ! March 2018
+    !----------------------------------------------------------------------------------------
+
     uses "mmxprs";
 
     declarations
